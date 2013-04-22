@@ -1,0 +1,43 @@
+e_starting_pos_x, e_starting_pos_y = (LOBBY_ELEVATOR_POSITION)
+    e_end_pos_x, e_end_pos_y = (PENTHOUSE_ELEVATOR_POSITION)
+    m1_starting_pos_x, m1_starting_pos_y = (0,0)    
+    m1_end_pos_y = m1_starting_pos_y - (e_starting_pos_y - e_end_pos_y)
+    m2_starting_pos_x, m2_starting_pos_y = (0,0)
+    m2_end_pos_y = m2_starting_pos_y - (e_starting_pos_y - e_end_pos_y)
+    count = 0
+    while count < elevator.mobs_at_location.__len__():
+        if count == 1:
+            m1_starting_pos_x, m1_starting_pos_y = elevator.mobs_at_location[count].get_position()
+        elif count == 2:
+            m2_starting_pos_x, m2_starting_pos_y = elevator.mobs_at_location[count].get_position()
+        count += 1
+    if direction == 'up':
+        while elevator.get_position() < (e_end_pos_x,e_end_pos_y):
+            if (e_starting_pos_y + 5)< e_end_pos_y:
+                elevator.mobs_at_location[0].set_pos(m1_starting_pos_x, m1_starting_pos_y-m1_end_pos_y)
+                if count == 2:
+                    elevator.mobs_at_location[1].set_pos(m2_starting_pos_x, m2_starting_pos_y-m2_end_pos_y)
+                elevator.set_position(PENTHOUSE_ELEVATOR_POSITION)
+            if count == 2:
+                elevator.mobs_at_location[1].set_pos(m2_starting_pos_x, m2_starting_pos_y-(count*5-5))
+            elevator.mobs_at_location[0].set_pos(m1_starting_pos_x, m1_starting_pos_y-(count*5-5))
+            elevator.set_position(e_starting_pos_x, e_starting_pos_y-(count*5-5))
+            repaint()
+            pygame.display.update()
+            pygame.time.delay(50)
+            
+    if direction == 'down':
+        while elevator.get_position() > e_end_pos_y:
+            if (e_starting_pos_y + 5) > e_end_pos_y:
+                elevator.mobs_at_location[0].set_pos(m1_starting_pos_x, m1_starting_pos_y+m1_end_pos_y)
+                if count == 2:
+                    elevator.mobs_at_location[1].set_pos(m2_starting_pos_x, m2_starting_pos_y+m1_end_pos_y)
+                elevator.set_position(LOBBY_ELEVATOR_POSITION)
+            if count == 2:
+                elevator.mobs_at_location[1].set_pos(m2_starting_pos_x, m2_starting_pos_y-(count*5-5))
+            elevator.mobs_at_location[0].set_pos(m1_starting_pos_x, m1_starting_pos_y-(count*5-5))
+            elevator.set_position(e_starting_pos_x, m1_starting_pos_y-(count*5-5))           
+            repaint()
+            pygame.display.update()     
+            pygame.time.delay(50)
+    elevator.move()
